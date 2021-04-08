@@ -21,7 +21,7 @@
 		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
 			<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
 		</div>
-		<form name="createEmployee" action="/employeeDetail" method="POST" onsubmit="return validateSave();" class="inputContent">
+		<form name="createEmployee" action="/employeeDetail" method="POST" onsubmit="return validateForm();" class="inputContent">
 			<label for="firstname">First Name:</label>
 			<input type="text" id="firstname" name="firstname">
 			<br><br>
@@ -45,7 +45,7 @@
 				<option value="701">General Manager</option>
 			</select>
 
-			<input type="submit" value="Save" id="submitButton">
+			<input type="submit" value="Save">
 		</form>
 	</div>
 
