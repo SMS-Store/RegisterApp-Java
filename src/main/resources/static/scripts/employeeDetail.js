@@ -36,6 +36,7 @@ function validateForm()
 	{
 		displayError("Passwords do not match!");
 		verifyPassword.focus();
+		verifyPassword.select();
 
 		return false;
 	}

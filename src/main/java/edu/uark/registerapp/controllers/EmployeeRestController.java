@@ -29,7 +29,7 @@ public class EmployeeRestController {
             .execute();
     }
 
-    @RequestMapping(value = "/{productId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{employeeId}", method = RequestMethod.PUT)
     public @ResponseBody ApiResponse updateEmployee(
         @PathVariable final UUID employeeId,
         @RequestBody final Employee employee
@@ -41,7 +41,7 @@ public class EmployeeRestController {
             .execute();
     }
 
-    @RequestMapping(value = "/{productId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{employeeId}", method = RequestMethod.DELETE)
     public @ResponseBody ApiResponse deleteEmployee(
         @PathVariable final UUID employeeId
     ) {
