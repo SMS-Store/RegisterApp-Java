@@ -1,23 +1,42 @@
 document.addEventListener("DOMContentLoaded", function(event)
 {
-	// Empty
+	document.getElementById("employeeID").style.display = "none";
+	document.getElementById("employeeIDLabel").style.display = "none";
 });
 
 function validateForm()
 {
-	let firstname = document.forms["createEmployee"]["firstname"].value;
-	let lastname = document.forms["createEmployee"]["lastname"].value;
-	let password = document.forms["createEmployee"]["password"].value;
-	let verifyPassword = document.forms["createEmployee"]["verifyPassword"].value;
+	let firstname = document.forms["createEmployee"]["firstname"];
+	let lastname = document.forms["createEmployee"]["lastname"];
+	let password = document.forms["createEmployee"]["password"];
+	let verifyPassword = document.forms["createEmployee"]["verifyPassword"];
 
-	if (firstname.length == 0 || lastname.length == 0 || password.length == 0)
+	if (firstname.value.trim() === "")
 	{
-		alert("Please fill in all fields!");
+		displayError("Please enter first name!");
+		firstname.focus();
+
 		return false;
 	}
-	else if (password !== verifyPassword)
+	else if (lastname.value.trim() === "")
 	{
-		alert("Passwords do not match!");
+		displayError("Please enter last name!");
+		lastname.focus();
+
+		return false;
+	}
+	else if (password.value.trim() === "")
+	{
+		displayError("Please enter a password!");
+		password.focus();
+
+		return false;
+	}
+	else if (password.value !== verifyPassword.value)
+	{
+		displayError("Passwords do not match!");
+		verifyPassword.focus();
+
 		return false;
 	}
 	else
