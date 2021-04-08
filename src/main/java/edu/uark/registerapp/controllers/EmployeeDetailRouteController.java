@@ -1,6 +1,7 @@
 package edu.uark.registerapp.controllers;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.uark.registerapp.controllers.enums.ViewModelNames;
 import edu.uark.registerapp.controllers.enums.ViewNames;
+import edu.uark.registerapp.models.api.Employee;
 import edu.uark.registerapp.models.entities.ActiveUserEntity;
 import edu.uark.registerapp.models.entities.EmployeeEntity;
 import edu.uark.registerapp.models.repositories.ActiveUserRepository;
@@ -22,9 +25,12 @@ import edu.uark.registerapp.models.repositories.EmployeeRepository;
 @RequestMapping(value = "/employeeDetail")
 public class EmployeeDetailRouteController extends BaseRouteController {
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showEmployeeDetail()
+	public ModelAndView start()
 	{
-		return new ModelAndView(ViewNames.EMPLOYEE_DETAIL.getViewName());
+		return (new ModelAndView(ViewNames.EMPLOYEE_DETAIL.getViewName()))
+			.addObject(
+				ViewModelNames.EMPLOYEE.getValue(),
+				(new Employee()).setId(UUID.fromString("00000000-0000-0000-0000-000000000000")));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
