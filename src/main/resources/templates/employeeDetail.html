@@ -22,6 +22,13 @@
 			<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
 		</div>
 		<form name="createEmployee" action="/employeeDetail" method="POST" onsubmit="return validateForm();" class="inputContent">
+			
+			<input type="hidden" id="recordID" name="recordID">
+
+			<label for="employeeID">Employee ID:</label>
+			<input type="text" id="employeeID" name="employeeID" disabled>
+			<br><br>
+
 			<label for="firstname">First Name:</label>
 			<input type="text" id="firstname" name="firstname">
 			<br><br>
