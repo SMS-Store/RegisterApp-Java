@@ -1,4 +1,4 @@
-/*form {
+form {
     width: 25%;
     padding: 40px 30px;
     border-radius: 7px;
@@ -33,7 +33,7 @@ input[type=submit]:hover {
 	background-color: black;
     box-shadow: 2px 2px 5px gray;
 }
-*/
+
 .employeeDetailWrapper {
 	display: inline-block;
 }
