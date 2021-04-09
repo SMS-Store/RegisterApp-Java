@@ -1,6 +1,8 @@
+let hideEmployeeSavedAlertTimer = undefined;
+
 document.addEventListener("DOMContentLoaded", function(event)
 {
-	getSaveActionElement().addEventListener("click", );
+	getSaveActionElement().addEventListener("click", saveActionClick);
 });
 
 // Attempts to save user input
@@ -13,16 +15,86 @@ function saveActionClick(event)
 	const saveActionElement = event.target;
 	saveActionElement.disabled = true;
 
+	const employeeId = getEmployeeId();
+    const employeeIdIsDefined = (employeeId.trim() !== "");
 
+    const saveActionUrl = ("/api/employee/"
+        + (employeeIdIsDefined ? employeeId : ""));
+
+    const saveEmployeeRequest = {
+        id: employeeId,
+        firstName: getFirstNameElement().value,
+        lastName: getLastNameElement().value,
+        password: getPasswordElement().value,
+        classification: getEmployeeClassElement().value
+    };
+    
+    if (employeeIdIsDefined) {
+        ajaxPatch(saveActionUrl, saveEmployeeRequest, (callbackResponse) =>  {
+            saveActionElement.disabled = false;
+
+            if (isSuccessResponse(callbackResponse)) {
+				saveAction(callbackResponse);
+			}
+        });
+    } else {
+        ajaxPost(saveActionUrl, saveEmployeeRequest, (callbackResponse) => {
+            saveActionElement.disabled = false; 
+
+            if (isSuccessResponse(callbackResponse)) {
+				saveAction(callbackResponse);
+			}
+        });
+    }
+
+}
+
+function saveAction(callbackResponse) {
+    if (callbackResponse.data == null) {
+		return;
+	}
+
+	if ((callbackResponse.data.redirectUrl != null)
+		&& (callbackResponse.data.redirectUrl !== "")) {
+
+		window.location.replace(callbackResponse.data.redirectUrl);
+		return;
+	}
+
+	displayEmployeeSavedAlert();
+}
+
+function displayEmployeeSavedAlert() {
+	if (hideEmployeeSavedAlertTimer) {
+		clearTimeout(hideEmployeeSavedAlertTimer);
+	}
+
+	const savedAlertElement = getSavedAlertElement();
+	savedAlertElement.style.display = "none";
+	savedAlertElement.style.display = "block";
+
+	hideEmployeeSavedAlertTimer = setTimeout(hideEmployeeSavedAlert, 1200);
+}
+
+function hideEmployeeSavedAlert() {
+	if (hideEmployeeSavedAlertTimer) {
+		clearTimeout(hideEmployeeSavedAlertTimer);
+	}
+
+	getSavedAlertElement().style.display = "none";
 }
 
 // Validates user input
 function validateSave()
 {
-	let firstname = document.forms["createEmployee"]["firstname"];
+	let firstname = getFirstNameElement();
+	let lastname = getLastNameElement();
+	let password = getPasswordElement();
+	let verifyPassword = getVerifyPasswordElement();
+	/*let firstname = document.forms["createEmployee"]["firstname"];
 	let lastname = document.forms["createEmployee"]["lastname"];
 	let password = document.forms["createEmployee"]["password"];
-	let verifyPassword = document.forms["createEmployee"]["verifyPassword"];
+	let verifyPassword = document.forms["createEmployee"]["verifyPassword"];*/
 
 	if (firstname.value.trim() === "")
 	{
@@ -149,4 +221,8 @@ function getVerifyPasswordElement()
 function getEmployeeClassElement()
 {
 	return document.getElementById("employeeClass");
+}
+
+function getSavedAlertElement() {
+	return document.getElementById("employeeSavedAlert");
 }
