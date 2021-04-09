@@ -16,21 +16,21 @@ function saveActionClick(event)
 	saveActionElement.disabled = true;
 
 	const employeeId = getEmployeeId();
-    const employeeIdIsDefined = (employeeId.trim() !== "");
+    const employeeIdIsDefined = ((employeeId != null) && (employeeId.trim() !== ""));
 
     const saveActionUrl = ("/api/employee/"
         + (employeeIdIsDefined ? employeeId : ""));
 
     const saveEmployeeRequest = {
         id: employeeId,
-        firstName: getFirstNameElement().value,
-        lastName: getLastNameElement().value,
-        password: getPasswordElement().value,
-        classification: getEmployeeClassElement().value
+        firstName: getFirstName(),
+        lastName: getLastName(),
+        password: getPassword(),
+        classification: getEmployeeClass()
     };
     
     if (employeeIdIsDefined) {
-        ajaxPatch(saveActionUrl, saveEmployeeRequest, (callbackResponse) =>  {
+        ajaxPut(saveActionUrl, saveEmployeeRequest, (callbackResponse) =>  {
             saveActionElement.disabled = false;
 
             if (isSuccessResponse(callbackResponse)) {
@@ -87,37 +87,33 @@ function hideEmployeeSavedAlert() {
 // Validates user input
 function validateSave()
 {
-	let firstname = getFirstNameElement();
-	let lastname = getLastNameElement();
-	let password = getPasswordElement();
-	let verifyPassword = getVerifyPasswordElement();
-	/*let firstname = document.forms["createEmployee"]["firstname"];
-	let lastname = document.forms["createEmployee"]["lastname"];
-	let password = document.forms["createEmployee"]["password"];
-	let verifyPassword = document.forms["createEmployee"]["verifyPassword"];*/
+	let firstname = getFirstName();
+	let lastname = getLastName();
+	let password = getPassword();
+	let verifyPassword = getVerifyPassword();
 
-	if (firstname.value.trim() === "")
+	if (firstname.trim() === "")
 	{
 		displayError("Please enter first name!");
 		firstname.focus();
 
 		return false;
 	}
-	else if (lastname.value.trim() === "")
+	else if (lastname.trim() === "")
 	{
 		displayError("Please enter last name!");
 		lastname.focus();
 
 		return false;
 	}
-	else if (password.value.trim() === "")
+	else if (password.trim() === "")
 	{
 		displayError("Please enter a password!");
 		password.focus();
 
 		return false;
 	}
-	else if (password.value !== verifyPassword.value)
+	else if (password !== verifyPassword)
 	{
 		displayError("Passwords do not match!");
 		verifyPassword.focus();

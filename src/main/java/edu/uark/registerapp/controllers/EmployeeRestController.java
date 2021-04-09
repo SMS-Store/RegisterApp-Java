@@ -23,10 +23,13 @@ public class EmployeeRestController {
     public @ResponseBody ApiResponse createEmployee(
         @RequestBody final Employee employee
     ) {
+		employee.setIsActive(false);
 
         return this.employeeCreateCommand
             .setApiEmployee(employee)
             .execute();
+
+		// TO DO: REDIRECT BASED ON INITIAL EMPLOYEE
     }
 
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.PUT)

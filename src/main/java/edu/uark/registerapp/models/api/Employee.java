@@ -101,22 +101,12 @@ public class Employee extends ApiResponse {
 		return this;
 	}
 
-	private boolean isInitialEmployee;
-	public boolean getIsInitialEmployee() {
-		return this.isInitialEmployee;
-	}
-	public Employee setIsInitialEmployee(final boolean isInitialEmployee) {
-		this.isInitialEmployee = isInitialEmployee;
-		return this;
-	}
-
 	public Employee() {
 		super();
 
 		this.isActive = true;
 		this.id = new UUID(0, 0);
 		this.classification = -1;
-		this.isInitialEmployee = false;
 		this.managerId = new UUID(0, 0);
 		this.lastName = StringUtils.EMPTY;
 		this.password = StringUtils.EMPTY;
@@ -129,7 +119,6 @@ public class Employee extends ApiResponse {
 	public Employee(final EmployeeEntity employeeEntity) {
 		super(false);
 
-		this.isInitialEmployee = false;
 		this.id = employeeEntity.getId();
 		this.password = StringUtils.EMPTY;
 		this.isActive = employeeEntity.getIsActive();
