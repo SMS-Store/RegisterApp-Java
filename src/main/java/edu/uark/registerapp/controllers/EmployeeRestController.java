@@ -26,6 +26,7 @@ public class EmployeeRestController extends BaseRestController {
         final HttpServletRequest request, 
         final HttpServletResponse response
     ) {
+		employee.setIsActive(false);
 
         final ApiResponse elevatedUserResponse =
         this.redirectUserNotElevated(
@@ -40,6 +41,8 @@ public class EmployeeRestController extends BaseRestController {
         return this.employeeCreateCommand
             .setApiEmployee(employee)
             .execute();
+
+		// TO DO: REDIRECT BASED ON INITIAL EMPLOYEE
     }
 
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.PUT)
