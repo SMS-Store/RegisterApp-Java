@@ -2,10 +2,6 @@ package edu.uark.registerapp.controllers;
 
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,30 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.uark.registerapp.commands.employees.EmployeeCreateCommand;
 import edu.uark.registerapp.commands.employees.EmployeeDeleteCommand;
 import edu.uark.registerapp.commands.employees.EmployeeUpdateCommand;
-import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.ApiResponse;
 import edu.uark.registerapp.models.api.Employee;
 
 @RestController
 @RequestMapping(value = "/api/employee")
-public class EmployeeRestController extends BaseRestController {
+public class EmployeeRestController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public @ResponseBody ApiResponse createEmployee(
-        @RequestBody final Employee employee,
-        final HttpServletRequest request, 
-        final HttpServletResponse response
+        @RequestBody final Employee employee
     ) {
 		employee.setIsActive(false);
-
-        final ApiResponse elevatedUserResponse =
-        this.redirectUserNotElevated(
-            request,
-            response,
-            ViewNames.EMPLOYEE_DETAIL.getRoute());
-
-    if (!elevatedUserResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
-        return elevatedUserResponse;
-    }
 
         return this.employeeCreateCommand
             .setApiEmployee(employee)
@@ -52,20 +35,8 @@ public class EmployeeRestController extends BaseRestController {
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.PUT)
     public @ResponseBody ApiResponse updateEmployee(
         @PathVariable final UUID employeeId,
-        @RequestBody final Employee employee,
-        final HttpServletRequest request,
-        final HttpServletResponse response
+        @RequestBody final Employee employee
     ) {
-
-        final ApiResponse elevatedUserResponse =
-        this.redirectUserNotElevated(
-            request,
-            response,
-            ViewNames.EMPLOYEE_DETAIL.getRoute()); 
-
-        if (!elevatedUserResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
-            return elevatedUserResponse;
-        }
 
         return this.employeeUpdateCommand
             .setEmployeeId(employeeId)
@@ -75,20 +46,8 @@ public class EmployeeRestController extends BaseRestController {
 
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.DELETE)
     public @ResponseBody ApiResponse deleteEmployee(
-        @PathVariable final UUID employeeId, 
-        final HttpServletRequest request,
-        final HttpServletResponse response
+        @PathVariable final UUID employeeId
     ) {
-
-        final ApiResponse elevatedUserResponse =
-        this.redirectUserNotElevated(
-            request,
-            response,
-            ViewNames.EMPLOYEE_DETAIL.getRoute());
-
-        if (!elevatedUserResponse.getRedirectUrl().equals(StringUtils.EMPTY)) {
-            return elevatedUserResponse;
-        }
 
         this.employeeDeleteCommand
             .setEmployeeId(employeeId)
@@ -107,5 +66,4 @@ public class EmployeeRestController extends BaseRestController {
     @Autowired
     private EmployeeUpdateCommand employeeUpdateCommand;
 }
-
 
