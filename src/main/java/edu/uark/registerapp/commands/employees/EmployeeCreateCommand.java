@@ -24,8 +24,6 @@ public class EmployeeCreateCommand implements ResultCommandInterface<Employee> {
 		}
 
 		 // Create a new ENTITY object from the API object details.
-		// final EmployeeEntity employeeEntity =
-		// 	this.employeeRepository.save(new EmployeeEntity(this.apiEmployee));
 		EmployeeEntity employeeEntity = new EmployeeEntity();
 		employeeEntity.setFirstName(this.apiEmployee.getFirstName());
 		employeeEntity.setLastName(this.apiEmployee.getLastName());
