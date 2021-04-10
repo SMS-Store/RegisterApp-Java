@@ -2,18 +2,17 @@ let hideProductSavedAlertTimer = undefined;
 
 document.addEventListener("DOMContentLoaded", () => {
 	const productLookupCodeElement = getProductLookupCodeElement();
+	
 	ajaxGet("/employeeDetail/getClass", (callbackResponse) => {
 		if (isSuccessResponse(callbackResponse))
 		{
 			if (callbackResponse.data == false)
 			{
-				document.getElementById("productCount").style.display = "none";
-				document.getElementById("productLookupCode").style.display = "none";
-				document.getElementById("productId").style.display = "none";
-				document.getElementById("deleteButton").style.display = "none";
-				document.getElementById("productSavedAlertModal").style.display = "none";
-				document.getElementById("saveButton").style.display = "none";
-			
+				getProductCountElement().disabled = "true";
+				productLookupCodeElement.disabled = "true";
+				getDeleteActionElement().style.display = "none";
+				getSavedAlertModalElement().style.display = "none";
+				getSaveActionElement().style.display = "none";
 			}
 		}
 	});
