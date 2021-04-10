@@ -2,13 +2,20 @@ let hideProductSavedAlertTimer = undefined;
 
 document.addEventListener("DOMContentLoaded", () => {
 	const productLookupCodeElement = getProductLookupCodeElement();
-
-	getProductCountElement().addEventListener("keypress", productCountKeypress);
-	productLookupCodeElement.addEventListener("keypress", productLookupCodeKeypress);
+	ajaxGet("/employeeDetail/getClass", (callbackResponse) => {
+		if (isSuccessResponse(callbackResponse))
+		{
+			if (callbackResponse.data == false)
+			{
+				getProductCountElement().addEventListener("keypress", productCountKeypress);
+				productLookupCodeElement.addEventListener("keypress", productLookupCodeKeypress);
+				
+				getSaveActionElement().addEventListener("click", saveActionClick);
+				getDeleteActionElement().addEventListener("click", deleteActionClick);
+			}
+		}
+	});
 	
-	getSaveActionElement().addEventListener("click", saveActionClick);
-	getDeleteActionElement().addEventListener("click", deleteActionClick);
-
 	if (!productLookupCodeElement.disabled) {
 		productLookupCodeElement.focus();
 		productLookupCodeElement.select();
