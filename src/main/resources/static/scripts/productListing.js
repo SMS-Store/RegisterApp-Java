@@ -4,6 +4,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	for (let i = 0; i < productListElements.length; i++) {
 		productListElements[i].addEventListener("click", productClick);
 	}
+
+	ajaxGet("/employeeDetail/getClass", (callbackResponse) => {
+		if (isSuccessResponse(callbackResponse))
+		{
+			if (callbackResponse.data == false)
+			{
+				getCreateNewButton().style.display = "none";
+			}
+		}
+	});
 });
 
 function findClickedListItemElement(clickedTarget) {
@@ -31,4 +41,8 @@ function productClick(event) {
 	window.location.assign(
 		"/productDetail/"
 		+ listItem.querySelector("input[name='productId'][type='hidden']").value);
+}
+
+function getCreateNewButton() {
+	return document.getElementById("createNewButton");
 }
