@@ -7,15 +7,22 @@ document.addEventListener("DOMContentLoaded", () => {
 		{
 			if (callbackResponse.data == false)
 			{
-				getProductCountElement().addEventListener("keypress", productCountKeypress);
-				productLookupCodeElement.addEventListener("keypress", productLookupCodeKeypress);
-				
-				getSaveActionElement().addEventListener("click", saveActionClick);
-				getDeleteActionElement().addEventListener("click", deleteActionClick);
+				document.getElementById("productCount").style.display = "none";
+				document.getElementById("productLookupCode").style.display = "none";
+				document.getElementById("productId").style.display = "none";
+				document.getElementById("deleteButton").style.display = "none";
+				document.getElementById("productSavedAlertModal").style.display = "none";
+				document.getElementById("saveButton").style.display = "none";
+			
 			}
 		}
 	});
+	getProductCountElement().addEventListener("keypress", productCountKeypress);
+	productLookupCodeElement.addEventListener("keypress", productLookupCodeKeypress);
 	
+	getSaveActionElement().addEventListener("click", saveActionClick);
+	getDeleteActionElement().addEventListener("click", deleteActionClick);
+
 	if (!productLookupCodeElement.disabled) {
 		productLookupCodeElement.focus();
 		productLookupCodeElement.select();
