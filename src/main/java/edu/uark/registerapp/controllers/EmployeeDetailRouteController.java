@@ -38,13 +38,13 @@ public class EmployeeDetailRouteController extends BaseRouteController {
 			this.getCurrentUser(request);
 		
 		// If nobody is signed in and employees exist...
-		if (activeUser.isEmpty() && employeeExistsQuery.execute())
+		if (!activeUser.isPresent() && employeeExistsQuery.execute())
 		{
 			// Redirect back to sign in page with error code 1001
 			return this.buildInvalidSessionResponse();
 		}
 		// Else if nobody is signed in (and no employees are defined)
-		else if (activeUser.isEmpty())
+		else if (!activeUser.isPresent())
 		{
 			// Serve default (empty) employee detail page
 			return serveDefaultPage();
@@ -72,7 +72,7 @@ public class EmployeeDetailRouteController extends BaseRouteController {
 		final Optional<ActiveUserEntity> activeUser =
 			this.getCurrentUser(request);
 		
-		if (activeUser.isEmpty())
+		if (!activeUser.isPresent())
 		{
 			return this.buildInvalidSessionResponse();
 		}

@@ -28,7 +28,7 @@ public class ProductDetailRouteController extends BaseRouteController {
 		final Optional<ActiveUserEntity> activeUser =
 			this.getCurrentUser(request);
 
-		if (activeUser.isEmpty())
+		if (!activeUser.isPresent())
 		{
 			return this.buildInvalidSessionResponse();
 		}
