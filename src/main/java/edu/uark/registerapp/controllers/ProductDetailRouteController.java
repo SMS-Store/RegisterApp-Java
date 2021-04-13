@@ -1,6 +1,9 @@
 package edu.uark.registerapp.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +17,22 @@ import edu.uark.registerapp.commands.products.ProductQuery;
 import edu.uark.registerapp.controllers.enums.ViewModelNames;
 import edu.uark.registerapp.controllers.enums.ViewNames;
 import edu.uark.registerapp.models.api.Product;
+import edu.uark.registerapp.models.entities.ActiveUserEntity;
 
 @Controller
 @RequestMapping(value = "/productDetail")
-public class ProductDetailRouteController {
+public class ProductDetailRouteController extends BaseRouteController {
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView start() {
+	public ModelAndView start(final HttpServletRequest request) {
+
+		final Optional<ActiveUserEntity> activeUser =
+			this.getCurrentUser(request);
+
+		if (activeUser.isEmpty())
+		{
+			return this.buildInvalidSessionResponse();
+		}
+
 		return (new ModelAndView(ViewNames.PRODUCT_DETAIL.getViewName()))
 			.addObject(
 				ViewModelNames.PRODUCT.getValue(),
