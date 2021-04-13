@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.uark.registerapp.commands.employees.EmployeeCreateCommand;
 import edu.uark.registerapp.commands.employees.EmployeeDeleteCommand;
+import edu.uark.registerapp.commands.employees.EmployeeExistsQuery;
 import edu.uark.registerapp.commands.employees.EmployeeUpdateCommand;
 import edu.uark.registerapp.models.api.ApiResponse;
 import edu.uark.registerapp.models.api.Employee;
@@ -25,11 +26,19 @@ public class EmployeeRestController {
     ) {
 		employee.setIsActive(false);
 
-        return this.employeeCreateCommand
+		if (this.employeeExistsQuery.execute())
+		{
+			return this.employeeCreateCommand
             .setApiEmployee(employee)
             .execute();
+		}
+		else
+		{
+			Employee initialEmployee =
+				this.employeeCreateCommand.setApiEmployee(employee).execute();
 
-		// TODO: REDIRECT BASED ON INITIAL EMPLOYEE
+			return initialEmployee.setIsInitialEmployee(true);
+		}
     }
 
     @RequestMapping(value = "/{employeeId}", method = RequestMethod.PUT)
@@ -57,6 +66,9 @@ public class EmployeeRestController {
     }
 
     // Properties
+	@Autowired
+	private EmployeeExistsQuery employeeExistsQuery;
+
     @Autowired
     private EmployeeCreateCommand employeeCreateCommand;
 

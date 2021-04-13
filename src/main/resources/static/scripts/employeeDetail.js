@@ -15,7 +15,7 @@ function saveActionClick(event)
 	const saveActionElement = event.target;
 	saveActionElement.disabled = true;
 
-	const employeeId = getEmployeeId();
+	const employeeId = getRecordId();
     const employeeIdIsDefined = ((employeeId != null) && (employeeId.trim() !== ""));
 
     const saveActionUrl = ("/api/employee/"
@@ -43,6 +43,14 @@ function saveActionClick(event)
 
             if (isSuccessResponse(callbackResponse)) {
 				saveAction(callbackResponse);
+				const initialEmployeeId = callbackResponse.data.id;
+
+				if (callbackResponse.data.isInitialEmployee) {
+					window.location.assign("/" + initialEmployeeId);
+				}
+				else {
+					window.location.assign("/employeeDetail/" + initialEmployeeId)
+				}
 			}
         });
     }

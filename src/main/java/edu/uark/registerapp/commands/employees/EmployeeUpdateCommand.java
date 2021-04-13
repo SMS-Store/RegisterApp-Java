@@ -39,6 +39,9 @@ public class EmployeeUpdateCommand implements ResultCommandInterface<Employee> {
 		if (EmployeeClassification.map(this.apiEmployee.getClassification()) == EmployeeClassification.NOT_DEFINED) {
 			throw new UnprocessableEntityException("classification");
 		}
+		if (StringUtils.isBlank(this.apiEmployee.getPassword())) {
+			throw new UnprocessableEntityException("password");
+		}
 	}
 
 	@Transactional
