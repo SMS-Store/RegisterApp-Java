@@ -16,37 +16,78 @@
 	<div class="header">
 		<h1 class="primary-message">Employee Detail</h1>
 	</div>
-		
+
 	<div id="main" class="main">
 		<div id="error" th:class="${#strings.isEmpty(errorMessage)} ? hidden : ''">
 			<h4 id="errorMessage" class="error-message" th:text="${errorMessage}"></h4>
 		</div>
-		<form name="createEmployee" action="/employeeDetail" method="POST" onsubmit="return validateForm();" class="inputContent">
-			<label for="firstname">First Name:</label>
-			<input type="text" id="firstname" name="firstname">
-			<br><br>
+		<div class="employeeDetailWrapper">
+			<table id="employeeDetail">
+				<tbody>
+					<tr class="hidden">
+						<td>Record ID:</td>
+						<td>
+							<input id="recordId" type="hidden" th:value="${!employee.isEmpty} ? ${employee.id} : ''"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">Employee ID:</td>
+						<td>
+							<input id="employeeId" type="text" th:value="${!employee.isEmpty} ? ${employee.employeeId} : ''" class="update" disabled/>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">First Name:</td>
+						<td>
+							<input id="firstName" type="text" th:value="${!employee.isEmpty} ? ${employee.firstName} : ''" class="update"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">Last Name:</td>
+						<td>
+							<input id="lastName" type="text" th:value="${!employee.isEmpty} ? ${employee.lastName} : ''" class ="update"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">Password:</td>
+						<td>
+							<input id="password" type="password" class="update"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">Verify Password:</td>
+						<td>
+							<input id="verifyPassword" type="password" class="update"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">Employee Classification:</td>
+						<td>
+							<select id="employeeClass" name="employeeClass">
+								<option value="101">Cashier</option>
+								<option value="501">Shift Manager</option>
+								<option value="701">General Manager</option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-			<label for="lastname">Last Name:</label>
-			<input type="text" id="lastname" name="lastname">
-			<br><br>
+		<div class="employeeActionWrapper">
+			<button id="saveButton" type="button" class="action">Save</button>
+		</div>
 
-			<label for="password">Password:</label>
-			<input type="password" id="password" name="password">
-			<br><br>
-			
-			<label for="verifyPassword">Verify Password:</label>
-			<input type="password" id="verifyPassword" name="verifyPassword">
-			<br><br>
-			
-			<label for="classification">Employee Type:</label>
-			<select id="classification" name="classification">
-				<option value="101">Cashier</option>
-				<option value="501">Shift Manager</option>
-				<option value="701">General Manager</option>
-			</select>
-
-			<input type="submit" value="Save">
-		</form>
+		<div id="employeeSavedAlert" class="modal animate-opacity-show">
+			<div class="modal-content">
+				<div class="container gray-blue">
+					<h1>
+						<span>Employee</span><br />
+						<span>Saved</span>
+					</h1>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div class="footer">

@@ -1,19 +1,23 @@
 package edu.uark.registerapp.controllers;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.uark.registerapp.commands.employees.EmployeeQuery;
 import edu.uark.registerapp.commands.employees.EmployeeSignInCommand;
 import edu.uark.registerapp.commands.exceptions.NotFoundException;
 import edu.uark.registerapp.controllers.enums.ViewModelNames;
 import edu.uark.registerapp.controllers.enums.ViewNames;
-
+import edu.uark.registerapp.models.api.Employee;
 import edu.uark.registerapp.models.api.EmployeeSignIn;
 import edu.uark.registerapp.models.repositories.ActiveUserRepository;
 import edu.uark.registerapp.models.repositories.EmployeeRepository;
@@ -24,16 +28,57 @@ import edu.uark.registerapp.models.repositories.EmployeeRepository;
 public class SignInRouteController extends BaseRouteController
 {
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView showSignIn()
+	public ModelAndView start()
 	{
 		// Check if any employees exist. If none, redirect to employeeDetail.
 		if (this.employeeRepository.count() == 0)
 		{
 			return new ModelAndView(
-				REDIRECT_PREPEND.concat(ViewNames.EMPLOYEE_DETAIL.getRoute()));
+				REDIRECT_PREPEND.concat(ViewNames.EMPLOYEE_DETAIL.getRoute())
+			);
 		}
 
-		return new ModelAndView(ViewNames.SIGN_IN.getViewName());
+		String uuidString = "00000000-0000-0000-0000-000000000000";
+
+		return new ModelAndView(ViewNames.SIGN_IN.getViewName())
+			.addObject(ViewModelNames.EMPLOYEE.getValue(),
+				(new Employee()).setId(UUID.fromString(uuidString)));
+	}
+
+	@RequestMapping(value = "{employeeUUID}", method = RequestMethod.GET)
+	public ModelAndView startWithEmployee(@PathVariable final UUID employeeUUID)
+	{
+		// Check if any employees exist. If none, redirect to employeeDetail.
+		if (this.employeeRepository.count() == 0)
+		{
+			return new ModelAndView(
+				REDIRECT_PREPEND.concat(ViewNames.EMPLOYEE_DETAIL.getRoute())
+			);
+		}
+
+		final ModelAndView modelAndView =
+			new ModelAndView(ViewNames.SIGN_IN.getViewName());
+
+		try
+		{
+			modelAndView.addObject(
+				ViewModelNames.EMPLOYEE.getValue(),
+				this.employeeQuery.setEmployeeId(employeeUUID).execute());
+		}
+		catch (final Exception e)
+		{
+			String uuidString = "00000000-0000-0000-0000-000000000000";
+
+			modelAndView.addObject(
+				ViewModelNames.ERROR_MESSAGE.getValue(),
+				e.getMessage());
+
+			modelAndView.addObject(
+				ViewModelNames.EMPLOYEE.getValue(),
+				(new Employee()).setId(UUID.fromString(uuidString)));
+		}
+
+		return modelAndView;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -75,9 +120,18 @@ public class SignInRouteController extends BaseRouteController
 				ViewModelNames.ERROR_MESSAGE.getValue(),
 				e.getMessage());
 
+			String uuidString = "00000000-0000-0000-0000-000000000000";
+
+			modelAndView.addObject(
+				ViewModelNames.EMPLOYEE.getValue(),
+				(new Employee()).setId(UUID.fromString(uuidString)));
+
 			return modelAndView;
 		}
 	}
+
+	@Autowired
+	EmployeeQuery employeeQuery;
 
 	@Autowired
 	EmployeeRepository employeeRepository;

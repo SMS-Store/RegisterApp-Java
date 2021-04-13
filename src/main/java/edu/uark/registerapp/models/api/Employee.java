@@ -105,8 +105,8 @@ public class Employee extends ApiResponse {
 	public boolean getIsInitialEmployee() {
 		return this.isInitialEmployee;
 	}
-	public Employee setIsInitialEmployee(final boolean isInitialEmployee) {
-		this.isInitialEmployee = isInitialEmployee;
+	public Employee setIsInitialEmployee(final boolean isInitial) {
+		this.isInitialEmployee = isInitial;
 		return this;
 	}
 
@@ -116,12 +116,12 @@ public class Employee extends ApiResponse {
 		this.isActive = true;
 		this.id = new UUID(0, 0);
 		this.classification = -1;
-		this.isInitialEmployee = false;
 		this.managerId = new UUID(0, 0);
 		this.lastName = StringUtils.EMPTY;
 		this.password = StringUtils.EMPTY;
 		this.firstName = StringUtils.EMPTY;
 		this.employeeId = StringUtils.EMPTY;
+		this.isInitialEmployee = false;
 
 		this.setCreatedOn(LocalDateTime.now());
 	}
@@ -129,7 +129,6 @@ public class Employee extends ApiResponse {
 	public Employee(final EmployeeEntity employeeEntity) {
 		super(false);
 
-		this.isInitialEmployee = false;
 		this.id = employeeEntity.getId();
 		this.password = StringUtils.EMPTY;
 		this.isActive = employeeEntity.getIsActive();
@@ -139,6 +138,24 @@ public class Employee extends ApiResponse {
 		this.classification = employeeEntity.getClassification();
 		this.employeeId =
 			EmployeeHelper.padEmployeeId(employeeEntity.getEmployeeId());
+		this.isInitialEmployee = false;
+
+		this.setCreatedOn(employeeEntity.getCreatedOn());
+	}
+
+	public Employee(final EmployeeEntity employeeEntity, final boolean isInitial) {
+		super(false);
+
+		this.id = employeeEntity.getId();
+		this.password = StringUtils.EMPTY;
+		this.isActive = employeeEntity.getIsActive();
+		this.lastName = employeeEntity.getLastName();
+		this.firstName = employeeEntity.getFirstName();
+		this.managerId = employeeEntity.getManagerId();
+		this.classification = employeeEntity.getClassification();
+		this.employeeId =
+			EmployeeHelper.padEmployeeId(employeeEntity.getEmployeeId());
+		this.isInitialEmployee = isInitial;
 
 		this.setCreatedOn(employeeEntity.getCreatedOn());
 	}
