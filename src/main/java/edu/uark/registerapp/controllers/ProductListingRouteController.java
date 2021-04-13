@@ -35,6 +35,8 @@ public class ProductListingRouteController {
 		return modelAndView;
 	}
 
+	//need to add modelAndView.addObject for Elevated user here!
+
 	// Properties
 	@Autowired
 	private ProductsQuery productsQuery;
